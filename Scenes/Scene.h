@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <vector>
+
 class SceneInitializer;
 class GameObject;
 class Camera;
@@ -27,5 +29,7 @@ class Scene {
     private:
         bool isRunning = false;
         SceneInitializer* initializer;
+        std::vector<GameObject*> gameObjectList;
+        std::vector<GameObject*> pendingObjectList; 
         Camera* camera;
 };

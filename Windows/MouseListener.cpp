@@ -18,29 +18,29 @@ MouseListener::MouseListener() : scrollX(0), scrollY(0), xPos(0), yPos(0), lastX
 
 
 void MouseListener::setGameViewportPos(glm::vec2 pos) {
-    instance->gameViewportPos = pos;
+    getInstance()->gameViewportPos = pos;
 }
 
 void MouseListener::setGameViewportSize(glm::vec2 size) {
-    instance->gameViewportSize = size;
+    getInstance()->gameViewportSize = size;
 }
 
 void MouseListener::endFrame() {
-    instance->scrollX = 0;
-    instance->scrollY = 0;
+    getInstance()->scrollX = 0;
+    getInstance()->scrollY = 0;
 }
 
 void MouseListener::clear() {
-    instance->scrollX = 0;
-    instance->scrollY = 0;
-    instance->xPos = 0;
-    instance->yPos = 0;
-    instance->lastX = 0;
-    instance->lastY = 0;
-    instance->mouseButtonDown = 0;
-    instance->m_isDragging = false;
+    getInstance()->scrollX = 0;
+    getInstance()->scrollY = 0;
+    getInstance()->xPos = 0;
+    getInstance()->yPos = 0;
+    getInstance()->lastX = 0;
+    getInstance()->lastY = 0;
+    getInstance()->mouseButtonDown = 0;
+    getInstance()->m_isDragging = false;
     for (int i = 0; i < 9; i++) {
-        instance->mouseButtonPressed[i] = false;
+        getInstance()->mouseButtonPressed[i] = false;
     }
 }
 
@@ -58,76 +58,76 @@ void MouseListener::mousePosCallback(GLFWwindow* window, double xpos, double ypo
         }
     }
 
-    if (instance->mouseButtonDown > 0) {
-        instance->m_isDragging = true;
+    if (getInstance()->mouseButtonDown > 0) {
+        getInstance()->m_isDragging = true;
     }
 
-    instance->lastX = instance->xPos;
-    instance->lastY = instance->yPos;
-    instance->lastWorldX = instance->worldX;
-    instance->lastWorldY = instance->worldY;
+    getInstance()->lastX = getInstance()->xPos;
+    getInstance()->lastY = getInstance()->yPos;
+    getInstance()->lastWorldX = getInstance()->worldX;
+    getInstance()->lastWorldY = getInstance()->worldY;
 
-    instance->xPos = xpos;
-    instance->yPos = ypos;
+    getInstance()->xPos = xpos;
+    getInstance()->yPos = ypos;
 }
 
 void MouseListener::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
     if (action == GLFW_PRESS) {
-        instance->mouseButtonDown |= 1 << button;
+        getInstance()->mouseButtonDown |= 1 << button;
         if (button < 9) {
-            instance->mouseButtonPressed[button] = true;
+            getInstance()->mouseButtonPressed[button] = true;
         }
     } else if (action == GLFW_RELEASE) {
-        instance->mouseButtonDown &= ~(1 << button);
+        getInstance()->mouseButtonDown &= ~(1 << button);
         if (button < 9) {
-            instance->mouseButtonPressed[button] = false;
-            instance->m_isDragging = false;
+            getInstance()->mouseButtonPressed[button] = false;
+            getInstance()->m_isDragging = false;
         }
     }
 }
 
 void MouseListener::mouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
-    instance->scrollX += xoffset;
-    instance->scrollY += yoffset;
+    getInstance()->scrollX += xoffset;
+    getInstance()->scrollY += yoffset;
 }
 
 float MouseListener::getX() {
-    return instance->xPos;
+    return getInstance()->xPos;
 }
 
 float MouseListener::getY() {
-    return instance->yPos;
+    return getInstance()->yPos;
 }
 
 float MouseListener::getScrollX() {
-    return instance->scrollX;
+    return getInstance()->scrollX;
 }
 
 float MouseListener::getScrollY() {
-    return instance->scrollY;
+    return getInstance()->scrollY;
 }
 
 float MouseListener::getWorldX() {
-    return instance->lastWorldX - instance->worldX;
+    return getInstance()->lastWorldX - getInstance()->worldX;
 }
 
 float MouseListener::getWorldY() {
-    return instance->lastWorldY - instance->worldY;
+    return getInstance()->lastWorldY - getInstance()->worldY;
 }
 
 glm::vec2 MouseListener::getWorld() {
-    return glm::vec2(instance->lastWorldX - instance->worldX, instance->lastWorldY - instance->worldY);
+    return glm::vec2(getInstance()->lastWorldX - getInstance()->worldX, getInstance()->lastWorldY - getInstance()->worldY);
 }
 
 bool MouseListener::isDragging() {
-    return instance->m_isDragging;
+    return getInstance()->m_isDragging;
 }
 
 bool MouseListener::isMouseButtonPressed(int button) {
     if (button < 0 || button >= 9) {
         return false;
     }
-    return instance->mouseButtonPressed[button];
+    return getInstance()->mouseButtonPressed[button];
 }
 
 glm::vec2 MouseListener::getScreenToWorld(const glm::vec2& screenCoords) {

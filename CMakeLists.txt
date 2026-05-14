@@ -78,6 +78,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/glad/include
     ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/glfw/include
     ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/glm
+    ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/json/single_include
+    ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/box2d-2.4.2/include
     # 4. 添加 ImGui 头文件路径
     ${IMGUI_DIR}
     ${IMGUI_DIR}/backends
@@ -87,8 +89,9 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE IMGUI_IMPL_OPENGL_LOADER_GLAD
 
 # 查找 glfw 库文件（glad 不再需要单独链接）
 find_library(GLFW_LIBRARY
-    NAMES glfw3 glfw glfw3.lib libglfw3.a
+    NAMES glfw3 glfw glfw3.lib libglfw3.a box2d.lib
     PATHS ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/glfw/lib
+    PATHS ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/box2d-2.4.2/lib
     NO_DEFAULT_PATH
 )
 
@@ -103,6 +106,7 @@ find_package(OpenGL REQUIRED)
 target_link_libraries(${PROJECT_NAME}
     ${GLFW_LIBRARY}
     ${OPENGL_LIBRARIES}
+    ${BOX2D_LIBRARY}
 )
 
 # Windows 下可能需要 opengl32

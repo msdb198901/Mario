@@ -7,6 +7,9 @@
 #include "PickingTexture.h"
 #include "ImGuiLayer.h"
 
+#include "MouseListener.h"
+#include "KeyListener.h"
+
 #include "Scene.h"
 #include "LevelEditorSceneInitializer.h"
 #include "SceneInitializer.h"
@@ -30,7 +33,7 @@ void Window::changeScene(SceneInitializer* sceneInitializer) {
     // Implement scene change logic here
     if (instance->currentScene) {
         instance->currentScene->destroy();
-        //delete instance->currentScene;
+        delete instance->currentScene;
     }
     instance->currentScene = new Scene(sceneInitializer);
     instance->currentScene->load();
@@ -83,21 +86,10 @@ void Window::init() {
         return;
     }
 
-    glfwSetCursorPosCallback(glfwWindow, [](GLFWwindow* window, double xpos, double ypos) {
-        // Handle mouse movement here
-    });
-
-    glfwSetMouseButtonCallback(glfwWindow, [](GLFWwindow* window, int button, int action, int mods) {
-        // Handle mouse button events here
-    });
-
-    glfwSetScrollCallback(glfwWindow, [](GLFWwindow* window, double xoffset, double yoffset) {
-        // Handle scroll events here
-    });
-
-    glfwSetKeyCallback(glfwWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
-        // Handle key events here
-    });
+    glfwSetCursorPosCallback(glfwWindow, MouseListener::mousePosCallback);
+    glfwSetMouseButtonCallback(glfwWindow, MouseListener::mouseButtonCallback);
+    glfwSetScrollCallback(glfwWindow, MouseListener::mouseScrollCallback);
+    glfwSetKeyCallback(glfwWindow, KeyListener::keyCallback);
 
     glfwSetWindowSizeCallback(glfwWindow, [](GLFWwindow* window, int width, int height) {
         // Handle window size changes here
@@ -127,10 +119,13 @@ void Window::init() {
     pickingTexture = new PickingTexture(3840, 2160);
     glViewport(0, 0, width, height);
     
-
-    imguiLayer = new ImGuiLayer(glfwWindow, pickingTexture);
-    imguiLayer->initImGui();
-    Window::changeScene(new LevelEditorSceneInitializer());
+    if (RELEASE_BUILD) {
+        runtimePlaying = true;
+    } else {
+        imguiLayer = new ImGuiLayer(glfwWindow, pickingTexture);
+        imguiLayer->initImGui();
+        Window::changeScene(new LevelEditorSceneInitializer());
+    }
 }
 
 void Window::initAudio() {
@@ -185,6 +180,10 @@ void Window::loop() {
         render();
 
         instance->imguiLayer->update(deltaTime, currentScene);
+
+
+        KeyListener::endFrame();
+        MouseListener::endFrame();
 
         glfwSwapBuffers(glfwWindow);
         glfwPollEvents();

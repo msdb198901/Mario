@@ -3,6 +3,8 @@
 #include "SceneInitializer.h"
 #include "GameObject.h"
 #include "Camera.h"
+#include "Transform.h"
+#include <memory>
 
 Scene::Scene(SceneInitializer* initializer) : initializer(initializer) {
 }
@@ -16,10 +18,20 @@ void Scene::init() {
 }
 
 void Scene::start() {
+    isRunning = true;
+    for (auto& gameObject : gameObjectList) {
+        gameObject->start();
+    }
+    isRunning = true;
 }
 
 void Scene::addGameObjectToScene(GameObject* gameObject) {
-    // Add the game object to the scene
+    if (!isRunning) {
+        gameObjectList.push_back(gameObject);
+    } else {
+        pendingObjectList.push_back(gameObject);
+    }
+    
 }
 
 void Scene::destroy() {
@@ -45,7 +57,8 @@ void Scene::save() {
 }
 
 GameObject* Scene::createGameObject(const char* name) {
-    GameObject* gameObject = new GameObject();
+    GameObject* gameObject = new GameObject(name);
+    gameObject->addComponent(std::make_unique<Transform>()); // 默认添加 Transform 组件
     return gameObject;
 }
 

@@ -54,6 +54,6 @@ class Window : public Observer {
 
         // ALCdevice* audioDevice;
         // ALCcontext* audioContext;
-
+        bool runtimePlaying = false;
         static Window *instance;
 };

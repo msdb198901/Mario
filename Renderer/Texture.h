@@ -22,6 +22,8 @@ class Texture {
             return textureID == other.textureID;
         }
 
+        std::string getFilepath() const { return filePath; }
+
     private:
         unsigned int textureID;
         int width;

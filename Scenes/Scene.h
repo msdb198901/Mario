@@ -26,6 +26,9 @@ class Scene {
         void destroyGameObject(const char* name);
         Camera* getCamera();
 
+        template<typename T>
+        GameObject* getGameObjectWith();
+
     private:
         bool isRunning = false;
         SceneInitializer* initializer;

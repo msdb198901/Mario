@@ -130,9 +130,9 @@ void Shader::uploadTexture(const char* varName, int slot) {
     glUniform1i(glGetUniformLocation(shaderProgramID, varName), slot);
 }
 
-void Shader::uploadIntArray(const char* varName, int count, const int* values) {
+void Shader::uploadIntArray(const char* varName, std::vector<int> values) {
     use();
-    glUniform1iv(glGetUniformLocation(shaderProgramID, varName), count, values);
+    glUniform1iv(glGetUniformLocation(shaderProgramID, varName), values.size(), values.data());
 }
 
 void Shader::compile() {

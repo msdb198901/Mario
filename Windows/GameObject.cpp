@@ -1,6 +1,10 @@
 ﻿#include "GameObject.h"
 #include "Transform.h"      // 具体组件头文件
 #include "Serialization.h"  // 全局序列化特化（GameObject 的 to_json/from_json）
+#include "SpriteRenderer.h"
+#include "Texture.h"
+#include "AssetPool.h"
+
 #include <nlohmann/json.hpp>
 
 int GameObject::nextId = 0;
@@ -98,13 +102,11 @@ GameObject GameObject::copy() const {
         c->generateId();
     }
 
-    // // 处理资源重载（例如 SpriteRenderer 的纹理需要从 AssetPool 重新获取）
-    // // 假设有 SpriteRenderer 组件
-    // if (auto* sprite = copy.getComponent<SpriteRenderer>()) {
-    //     if (sprite->getTexture() && !sprite->getTexture()->getFilepath().empty()) {
-    //         sprite->setTexture(AssetPool::getTexture(sprite->getTexture()->getFilepath()));
-    //     }
-    // }
-
+    // 处理资源重载（例如 SpriteRenderer 的纹理需要从 AssetPool 重新获取）
+    if (auto* sprite = copy.getComponent<SpriteRenderer>()) {
+        if (sprite->getTexture() && !sprite->getTexture()->getFilepath().empty()) {
+            sprite->setTexture(AssetPool::getTexture(sprite->getTexture()->getFilepath()));
+        }
+    }
     return copy;
 }

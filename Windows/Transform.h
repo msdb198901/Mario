@@ -7,24 +7,24 @@
 class Transform : public Component {
 public:
     float x = 0, y = 0, z = 0;
+    glm::vec2 position;
+    glm::vec2 scale;
+    float rotation = 0;
+    int zIndex = 0;
+
+    Transform();
+    Transform(glm::vec2 pos);
+    Transform(glm::vec2 pos, glm::vec2 scale = {1.0f, 1.0f});
+
+    void init(glm::vec2 pos, glm::vec2 scale = {1.0f, 1.0f});
 
     // 必须实现
     std::string getTypeName() const override { return "Transform"; }
-    json toJson() const override {
-        return {{"x", x}, {"y", y}, {"z", z}};
-    }
-    void fromJson(const json& j) override {
-        x = j.value("x", 0.0f);
-        y = j.value("y", 0.0f);
-        z = j.value("z", 0.0f);
-    }
+    json toJson() const override;
+    void fromJson(const json& j) override;
 
     // imgui 实现（手动）
-    void imgui() override {
-        JImGui::dragFloat("x", x);
-        JImGui::dragFloat("y", y);
-        JImGui::dragFloat("z", z);
-    }
+    void imgui() override;
 };
 
 // 注册工厂（通常在全局或 main 之前）

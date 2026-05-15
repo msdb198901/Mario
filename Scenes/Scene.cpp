@@ -69,3 +69,14 @@ void Scene::destroyGameObject(const char* name) {
 Camera* Scene::getCamera() {
     return camera;
 }
+
+template<typename T>
+GameObject* Scene::getGameObjectWith() {
+    static_assert(std::is_base_of_v<Component, T>, "T must derive from Component");
+    for (GameObject* go : gameObjects) {
+        if (go->getComponent<T>() != nullptr) {
+            return go;
+        }
+    }
+    return nullptr;
+}

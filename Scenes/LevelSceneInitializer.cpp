@@ -1,23 +1,24 @@
-﻿#include "LevelEditorSceneInitializer.h"
+﻿#include "LevelSceneInitializer.h"
 #include "Scene.h"
 #include "AssetPool.h"
 #include "Spritesheet.h"
 #include "Sprite.h"
 #include "GameObject.h"
 #include "imgui.h"
+#include "GameCamera.h"
 
-void LevelEditorSceneInitializer::init(Scene* scene) {
+void LevelSceneInitializer::init(Scene* scene) {
     // Initialize the level editor specific components here.
     sprites = AssetPool::getSpritesheet("assets/images/spritesheets/decorationsAndBlocks.png");
     Spritesheet* gizmos = AssetPool::getSpritesheet("assets/images/gizmos.png");
 
-    levelEditorStuff = scene->createGameObject("LevelEditor");
-    levelEditorStuff->setNoSerialize();
-
-    scene->addGameObjectToScene(levelEditorStuff);
+    GameObject *cameraObject = scene->createGameObject("GameCamera");
+    cameraObject->addComponent(std::make_unique<GameCamera>(scene->getCamera()));
+    cameraObject->start();
+    scene->addGameObjectToScene(cameraObject);
 }
 
-void LevelEditorSceneInitializer::loadResources(Scene* scene) {
+void LevelSceneInitializer::loadResources(Scene* scene) {
     // Load the level editor specific resources here.
     AssetPool::getShader("assets/shaders/default.glsl");
     AssetPool::addSpritesheet("assets/images/spritesheets/decorationsAndBlocks.png",
@@ -44,9 +45,10 @@ void LevelEditorSceneInitializer::loadResources(Scene* scene) {
     AssetPool::getTexture("assets/images/blendImage2.png");
 }
 
-void LevelEditorSceneInitializer::imgui() {
+void LevelSceneInitializer::imgui() {
     // Implement the level editor specific ImGui interface here.
     //ImGui::Begin("Level Editor Stuff");
 
     //ImGui::End();
 }
+

@@ -67,8 +67,8 @@ void MouseListener::mousePosCallback(GLFWwindow* window, double xpos, double ypo
     getInstance()->lastWorldX = getInstance()->worldX;
     getInstance()->lastWorldY = getInstance()->worldY;
 
-    getInstance()->xPos = xpos;
-    getInstance()->yPos = ypos;
+    getInstance()->xPos = (float)xpos;
+    getInstance()->yPos = (float)ypos;
 }
 
 void MouseListener::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
@@ -87,8 +87,8 @@ void MouseListener::mouseButtonCallback(GLFWwindow* window, int button, int acti
 }
 
 void MouseListener::mouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
-    getInstance()->scrollX += xoffset;
-    getInstance()->scrollY += yoffset;
+    getInstance()->scrollX += (float)xoffset;
+    getInstance()->scrollY += (float)yoffset;
 }
 
 float MouseListener::getX() {

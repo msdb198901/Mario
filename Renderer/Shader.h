@@ -3,6 +3,8 @@
 #include <string>
 #include <glm/glm.hpp>
 
+#include <vector>
+
 class Shader {
     public:
         Shader(const char* filePath);
@@ -23,7 +25,7 @@ class Shader {
         void uploadInt(const char* varName, int value);
         void uploadBool(const char* varName, bool value);
         void uploadTexture(const char* varName, int slot);
-        void uploadIntArray(const char* varName, int count, const int* values);
+        void uploadIntArray(const char* varName, std::vector<int> values);
 
         int getID() const { return shaderProgramID; }
 

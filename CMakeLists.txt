@@ -22,7 +22,6 @@ project(Mario)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
 # 收集项目中的源文件
 file(GLOB_RECURSE SRC_FILES
     "main.cpp"
@@ -49,6 +48,18 @@ endif()
 # 2. 设置 ImGui 目录
 set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui)
 
+file(GLOB_RECURSE HEADER_FILES
+    "Components/*.h"
+    "Components/*.hpp"
+    "Editor/*.h"
+    "Windows/*.h"
+    "Observers/*.h"
+    "Physics2d/*.h"
+    "Renderer/*.h"
+    "Scenes/*.h"
+    "Util/*.h"
+)
+
 # 3. 添加 ImGui 核心源文件 (使用 .cpp 文件)
 list(APPEND SRC_FILES
     ${IMGUI_DIR}/imgui.cpp
@@ -63,11 +74,24 @@ list(APPEND SRC_FILES
 # ================== Dear ImGui 配置结束 ==================
 
 # 创建可执行文件
-add_executable(${PROJECT_NAME} ${SRC_FILES})
+add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES})
+
+# ================== 组织 VS 中的文件夹层级 ==================
+# 让源文件按物理目录显示在 "Source Files" 下
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}
+    PREFIX "Source Files"
+    FILES ${SRC_FILES}
+)
+# 让头文件按物理目录显示在 "Header Files" 下
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}
+    PREFIX "Header Files"
+    FILES ${HEADER_FILES}
+)
 
 # 包含头文件目录
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Components
+    ${CMAKE_CURRENT_SOURCE_DIR}/Components/Controller
     ${CMAKE_CURRENT_SOURCE_DIR}/Renderer
     ${CMAKE_CURRENT_SOURCE_DIR}/Observers
     ${CMAKE_CURRENT_SOURCE_DIR}/Editor
